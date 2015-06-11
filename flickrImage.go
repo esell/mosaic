@@ -44,12 +44,10 @@ type FlickrPhoto struct {
 	AvgRGB map[string]uint32
 }
 
-var apiKey = ""
-
 // run a query against flickr, break it up into smaller chunks if needed since
 // flickr will only give us 4k results per query
 func flickrQueryNew(fg HttpGetter, startDate time.Time, endDate time.Time, pageCount int, query string) []PhotoResponse {
-	resultCountQuery := "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=" + apiKey + "&media=photos&per_page=400&page=1&format=json&nojsoncallback=1&min_upload_date=" + strconv.FormatInt(startDate.Unix(), 10) + "&max_upload_date=" + strconv.FormatInt(endDate.Unix(), 10) + "&text=" + query + "&sort=relevance"
+	resultCountQuery := "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=" + fg.GetKey() + "&media=photos&per_page=400&page=1&format=json&nojsoncallback=1&min_upload_date=" + strconv.FormatInt(startDate.Unix(), 10) + "&max_upload_date=" + strconv.FormatInt(endDate.Unix(), 10) + "&text=" + query + "&sort=relevance"
 	body, err := fg.Get(resultCountQuery)
 	if err != nil {
 		logger.Println("error getting Flickr results: ", err)
@@ -86,7 +84,7 @@ func flickrGroupQuery(fg HttpGetter, startDate time.Time, endDate time.Time, que
 	}
 
 	allPhotos := make([]PhotoResponse, 0)
-	resultCountQuery := "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=" + apiKey + "&media=photos&per_page=400&page=1&format=json&nojsoncallback=1&min_upload_date=" + strconv.FormatInt(startDate.Unix(), 10) + "&max_upload_date=" + strconv.FormatInt(endDate.Unix(), 10) + "&text=" + query + "&sort=relevance"
+	resultCountQuery := "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=" + fg.GetKey() + "&media=photos&per_page=400&page=1&format=json&nojsoncallback=1&min_upload_date=" + strconv.FormatInt(startDate.Unix(), 10) + "&max_upload_date=" + strconv.FormatInt(endDate.Unix(), 10) + "&text=" + query + "&sort=relevance"
 	body, err := fg.Get(resultCountQuery)
 	if err != nil {
 		logger.Println("error getting Flickr results: ", err)
@@ -172,7 +170,7 @@ func flickrGroupQuery(fg HttpGetter, startDate time.Time, endDate time.Time, que
 
 // loads a specific page from a query and parses out all the image details
 func flickrQueryPage(fg HttpGetter, startDate time.Time, endDate time.Time, page string, query string, photoChan chan PhotoResponse) {
-	resultCountQuery := "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=" + apiKey + "&media=photos&per_page=400&page=" + page + "&format=json&nojsoncallback=1&min_upload_date=" + strconv.FormatInt(startDate.Unix(), 10) + "&max_upload_date=" + strconv.FormatInt(endDate.Unix(), 10) + "&text=" + query + "&sort=relevance"
+	resultCountQuery := "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=" + fg.GetKey() + "&media=photos&per_page=400&page=" + page + "&format=json&nojsoncallback=1&min_upload_date=" + strconv.FormatInt(startDate.Unix(), 10) + "&max_upload_date=" + strconv.FormatInt(endDate.Unix(), 10) + "&text=" + query + "&sort=relevance"
 	body, err := fg.Get(resultCountQuery)
 	if err != nil {
 		logger.Println("Error getting Flickr results: ", err)
@@ -258,7 +256,7 @@ func getFlickrPhotoNoSave(getString string, fg HttpGetter) (image.Image, error) 
 // query Flickr to detect a search range that will give us the amount of images we need for the mosaic
 func queryFixer(fg HttpGetter, startDate time.Time, endDate time.Time, resultsNeeded int, query string, called int) (time.Time, string) {
 	var goodStart time.Time
-	resultCountQuery := "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=" + apiKey + "&media=photos&per_page=400&page=1&format=json&nojsoncallback=1&min_upload_date=" + strconv.FormatInt(startDate.Unix(), 10) + "&max_upload_date=" + strconv.FormatInt(endDate.Unix(), 10) + "&text=" + query + "&sort=relevance"
+	resultCountQuery := "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=" + fg.GetKey() + "&media=photos&per_page=400&page=1&format=json&nojsoncallback=1&min_upload_date=" + strconv.FormatInt(startDate.Unix(), 10) + "&max_upload_date=" + strconv.FormatInt(endDate.Unix(), 10) + "&text=" + query + "&sort=relevance"
 	body, err := fg.Get(resultCountQuery)
 	if err != nil {
 		logger.Println("error getting Flickr photo list: ", err)

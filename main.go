@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -27,6 +28,7 @@ type CreateResponse struct {
 }
 
 var templates = template.Must(template.ParseFiles("index.html", "done.html"))
+var apiKey = flag.String("k", "", "Flickr API key")
 var logger *log.Logger
 
 func init() {
@@ -38,6 +40,7 @@ func init() {
 }
 
 func main() {
+	flag.Parse()
 	runtime.GOMAXPROCS(2)
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("static/css"))))
 	http.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("static/js"))))
@@ -93,7 +96,7 @@ func createHandler(w http.ResponseWriter, r *http.Request) {
 		failedResponse(w, "Sadly your image is too big, please shrink it down to a max of 1200px by 1200px and resubmit :(")
 		return
 	}
-	flickrGetter := FlickrGetter{SaveDir: "fromFlickr"}
+	flickrGetter := FlickrGetter{SaveDir: "fromFlickr", FlickrKey: *apiKey}
 	buildChan := make(chan bool, 1)
 	buildSuccess := false
 	if r.FormValue("searchTerms") != "" {

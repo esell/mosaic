@@ -8,7 +8,8 @@ import (
 
 // This guy handles the actual http to/from Flickr
 type FlickrGetter struct {
-	SaveDir string
+	SaveDir   string
+	FlickrKey string
 }
 
 var flickrClient *http.Client
@@ -37,4 +38,8 @@ func (FlickrGetter) Get(url string) ([]byte, error) {
 
 func (f FlickrGetter) GetSaveDir() string {
 	return f.SaveDir
+}
+
+func (f FlickrGetter) GetKey() string {
+	return f.FlickrKey
 }

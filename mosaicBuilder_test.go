@@ -20,19 +20,19 @@ type TestGoodsGetter struct {
 
 func (TestGoodsGetter) Get(url string) ([]byte, error) {
 
-	if strings.Contains(url, "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=488c1e7018f1ddf78b09d51a9604622a&media=photos&per_page=400&page=1&format=json") {
+	if strings.Contains(url, "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=xyz&media=photos&per_page=400&page=1&format=json") {
 		return mockFlickrResp("1", "5", "2000"), nil
 	}
-	if strings.Contains(url, "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=488c1e7018f1ddf78b09d51a9604622a&media=photos&per_page=400&page=2&format=json") {
+	if strings.Contains(url, "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=xyz&media=photos&per_page=400&page=2&format=json") {
 		return mockFlickrResp("2", "5", "2000"), nil
 	}
-	if strings.Contains(url, "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=488c1e7018f1ddf78b09d51a9604622a&media=photos&per_page=400&page=3&format=json") {
+	if strings.Contains(url, "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=xyz&media=photos&per_page=400&page=3&format=json") {
 		return mockFlickrResp("3", "5", "2000"), nil
 	}
-	if strings.Contains(url, "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=488c1e7018f1ddf78b09d51a9604622a&media=photos&per_page=400&page=4&format=json") {
+	if strings.Contains(url, "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=xyz&media=photos&per_page=400&page=4&format=json") {
 		return mockFlickrResp("4", "5", "2000"), nil
 	}
-	if strings.Contains(url, "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=488c1e7018f1ddf78b09d51a9604622a&media=photos&per_page=400&page=5&format=json") {
+	if strings.Contains(url, "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=xyz&media=photos&per_page=400&page=5&format=json") {
 		return mockFlickrResp("5", "5", "2000"), nil
 	}
 
@@ -55,6 +55,10 @@ func (TestGoodsGetter) Get(url string) ([]byte, error) {
 func (TestGoodsGetter) GetSaveDir() string {
 	return "testData"
 }
+func (TestGoodsGetter) GetKey() string {
+	return "xyz"
+}
+
 func TestGetFlickrPhotos(t *testing.T) {
 	os.RemoveAll("testData")
 	os.Mkdir("testData", 0777)
